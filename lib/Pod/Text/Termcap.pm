@@ -1,14 +1,14 @@
 # Pod::Text::Termcap -- Convert POD data to ASCII text with format escapes.
-# $Id: Termcap.pm,v 0.2 1999/07/29 15:42:19 eagle Exp $
+# $Id: Termcap.pm,v 0.4 1999/09/20 10:17:45 eagle Exp $
 #
 # Copyright 1999 by Russ Allbery <rra@stanford.edu>
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the same terms as Perl itself.
 #
-# This is a simple subclass of Pod::SimpleText that overrides a few key
-# methods to output the right termcap escape sequences for formatted text
-# on the current terminal type.
+# This is a simple subclass of Pod::Text that overrides a few key methods to
+# output the right termcap escape sequences for formatted text on the
+# current terminal type.
 
 ############################################################################
 # Modules and declarations
@@ -18,16 +18,17 @@ package Pod::Text::Termcap;
 
 require 5.004;
 
-use Pod::PlainText ();
+use Pod::Text ();
 use POSIX ();
 use Term::Cap;
+
 use strict;
 use vars qw(@ISA $VERSION);
 
-@ISA = qw(Pod::SimpleText);
+@ISA = qw(Pod::Text);
 
 # Use the CVS revision of this file as its version number.
-($VERSION = (split (' ', q$Revision: 0.2 $ ))[1]) =~ s/\.(\d)$/.0$1/;
+($VERSION = (split (' ', q$Revision: 0.4 $ ))[1]) =~ s/\.(\d)$/.0$1/;
 
 
 ############################################################################
@@ -125,14 +126,14 @@ Pod::Text::Color - Convert POD data to ASCII text with format escapes
 
 =head1 DESCRIPTION
 
-Pod::Text::Termcap is a simple subclass of Pod::SimpleText that highlights
-output text using the correct termcap escape sequences for the current
-terminal.  Apart from the format codes, it in all ways functions like
-Pod::SimpleText.  See L<Pod::SimpleText> for details and available options.
+Pod::Text::Termcap is a simple subclass of Pod::Text that highlights output
+text using the correct termcap escape sequences for the current terminal.
+Apart from the format codes, it in all ways functions like Pod::Text.  See
+L<Pod::Text> for details and available options.
 
 =head1 SEE ALSO
 
-L<Pod::PlainText|Pod::PlainText>, L<Pod::Parser|Pod::Parser>
+L<Pod::Text|Pod::Text>, L<Pod::Parser|Pod::Parser>
 
 =head1 AUTHOR
 

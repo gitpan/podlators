@@ -1,13 +1,29 @@
 # Makefile.PL for podlators.
-# $Id: Makefile.PL,v 0.2 1999/07/29 15:32:08 eagle Exp $
+# $Id: Makefile.PL,v 0.5 1999/09/20 11:40:58 eagle Exp $
+
+BEGIN {
+    require 5.004;
+    eval { require File::Spec };
+    if ($@) { die "You need to install the File::Spec module first!\n" }
+}
+
+# Use File::Spec to handle paths, for portability.
+sub script {
+    my @scripts = map { File::Spec->catfile ('scripts', $_) } @_;
+    wantarray ? @scripts : join (' ', @scripts);
+}
+
 use ExtUtils::MakeMaker;
 WriteMakefile (
     NAME         => 'Pod',
     DISTNAME     => 'podlators',
-    EXE_FILES    => [ 'scripts/pod2txt' ],
+    PL_FILES     => { script ('pod2text.PL', 'pod2text'),
+                      script ('pod2roff.PL', 'pod2roff') },
+    EXE_FILES    => [ script ('pod2text', 'pod2roff') ],
+    PREREQ_PM    => { 'File::Spec' => 0, 'Pod::Parser' => 0 },
     ($] >= 5.005 ?
      (ABSTRACT   => 'Convert POD data to various other formats',
       AUTHOR     => 'Russ Allbery (rra@stanford.edu)') : ()),
     VERSION_FROM => 'VERSION',
-    dist         => { COMPRESS => 'gzip', SUFFIX => 'gz' }
+    realclean    => { FILES => scalar script ('pod2text', 'pod2roff') }
 );
