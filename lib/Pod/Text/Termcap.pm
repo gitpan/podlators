@@ -1,5 +1,5 @@
 # Pod::Text::Termcap -- Convert POD data to ASCII text with format escapes.
-# $Id: Termcap.pm,v 1.5 2001/11/28 00:21:28 eagle Exp $
+# $Id: Termcap.pm,v 1.6 2001/11/28 05:44:09 eagle Exp $
 #
 # Copyright 1999, 2001 by Russ Allbery <rra@stanford.edu>
 #
@@ -30,7 +30,7 @@ use vars qw(@ISA $VERSION);
 # Don't use the CVS revision as the version, since this module is also in Perl
 # core and too many things could munge CVS magic revision strings.  This
 # number should ideally be the same as the CVS revision in podlators, however.
-$VERSION = 1.05;
+$VERSION = 1.06;
 
 
 ##############################################################################
@@ -41,22 +41,30 @@ $VERSION = 1.05;
 # do all the stuff we normally do.
 sub initialize {
     my $self = shift;
+    my ($ospeed, $term, $termios);
 
     # The default Term::Cap path won't work on Solaris.
     $ENV{TERMPATH} = "$ENV{HOME}/.termcap:/etc/termcap"
         . ":/usr/share/misc/termcap:/usr/share/lib/termcap";
 
-    my $termios = POSIX::Termios->new;
-    $termios->getattr;
-    my $ospeed = $termios->getospeed;
-    my $term;
+    # Fall back on a hard-coded terminal speed if POSIX::Termios isn't
+    # available (such as on VMS).
+    eval { $termios = POSIX::Termios->new };
+    if ($@) {
+        $ospeed = '9600';
+    } else {
+        $termios->getattr;
+        $ospeed = $termios->getospeed;
+    }
+
+    # Fall back on the ANSI escape sequences if Term::Cap doesn't work.
     eval { $term = Tgetent Term::Cap { TERM => undef, OSPEED => $ospeed } };
     $$self{BOLD} = $$term{_md} || "\e[1m";
     $$self{UNDL} = $$term{_us} || "\e[4m";
     $$self{NORM} = $$term{_me} || "\e[m";
 
     unless (defined $$self{width}) {
-        $$self{width} = $ENV{COLUMNS} || $$term{_co} || 78;
+        $$self{width} = $ENV{COLUMNS} || $$term{_co} || 80;
         $$self{width} -= 2;
     }
 
