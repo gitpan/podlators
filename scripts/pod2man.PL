@@ -35,15 +35,13 @@ $Config{startperl}
 
 print OUT <<'!NO!SUBS!';
 
-# pod2roff -- Convert POD data to formatted *roff input.
+# pod2man -- Convert POD data to formatted *roff input.
+# $Id: pod2man.PL,v 1.2 2000/03/16 21:08:23 eagle Exp $
 #
-# Copyright 1999 by Russ Allbery <rra@stanford.edu>
+# Copyright 1999, 2000 by Russ Allbery <rra@stanford.edu>
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the same terms as Perl itself.
-#
-# The driver script for Pod::Man.  This script is expected to eventually
-# replace pod2man in the standard Perl distribution.
 
 require 5.004;
 
@@ -52,12 +50,17 @@ use Pod::Man ();
 use Pod::Usage qw(pod2usage);
 
 use strict;
-use vars;
+
+# Insert -- into @ARGV before any single dash argument to hide it from
+# Getopt::Long; we want to interpret it as meaning stdin (which Pod::Parser
+# does correctly).
+my $stdin;
+@ARGV = map { $_ eq '-' && !$stdin++ ? ('--', $_) : $_ } @ARGV;
 
 # Parse our options, trying to retain backwards compatibility with pod2man
 # but allowing short forms as well.  --lax is currently ignored.
 my %options;
-Getopt::Long::config ('bundling');
+Getopt::Long::config ('bundling_override');
 GetOptions (\%options, 'section|s=s', 'release|r=s', 'center|c=s',
             'date|d=s', 'fixed=s', 'fixedbold=s', 'fixeditalic=s',
             'fixedbolditalic=s', 'official|o', 'lax|l', 'help|h') or exit 1;
@@ -76,21 +79,21 @@ __END__
 
 =head1 NAME
 
-pod2roff - Convert POD data to formatted *roff input
+pod2man - Convert POD data to formatted *roff input
 
 =head1 SYNOPSIS
 
-pod2txt [B<--section>=I<manext>] [B<--release>=I<version>]
+pod2man [B<--section>=I<manext>] [B<--release>=I<version>]
 [B<--center>=I<string>] [B<--date>=I<string>] [B<--fixed>=I<font>]
 [B<--fixedbold>=I<font>] [B<--fixeditalic>=I<font>]
 [B<--fixedbolditalic>=I<font>] [B<--official>] [B<--lax>] [I<input>
 [I<output>]]
 
-pod2txt B<--help>
+pod2man B<--help>
 
 =head1 DESCRIPTION
 
-B<pod2roff> is a front-end for Pod::Man, using it to generate *roff input
+B<pod2man> is a front-end for Pod::Man, using it to generate *roff input
 from POD source.  The resulting *roff code is suitable for display on a
 terminal using nroff(1), normally via man(1), or printing using troff(1).
 
@@ -103,7 +106,7 @@ B<--section>, B<--release>, B<--center>, B<--date>, and B<--official> can be
 used to set the headers and footers to use; if not given, Pod::Man will
 assume various defaults.  See below or L<Pod::Man> for details.
 
-B<pod2roff> assumes that your *roff formatters have a fixed-width font named
+B<pod2man> assumes that your *roff formatters have a fixed-width font named
 CW.  If yours is called something else (like CR), use B<--fixed> to specify
 it.  This generally only matters for troff output for printing.  Similarly,
 you can set the fonts used for bold, italic, and bold italic fixed-width
@@ -196,7 +199,7 @@ section 3 will be selected.
 
 =head1 DIAGNOSTICS
 
-If B<pod2roff> fails with errors, see L<Pod::Man> and L<Pod::Parser> for
+If B<pod2man> fails with errors, see L<Pod::Man> and L<Pod::Parser> for
 information about what those errors might mean.
 
 =head1 EXAMPLES
@@ -320,11 +323,11 @@ functions.
 
 =item ERRORS
 
-Exceptions, error return codes, exit stati, and errno settings.  Typically
-used for function documentation; program documentation uses DIAGNOSTICS
-instead.  The general rule of thumb is that errors printed to STDOUT or
-STDERR and intended for the end user are documented in DIAGNOSTICS while
-errors passed internal to the calling program and intended for other
+Exceptions, error return codes, exit statuses, and errno settings.
+Typically used for function documentation; program documentation uses
+DIAGNOSTICS instead.  The general rule of thumb is that errors printed to
+STDOUT or STDERR and intended for the end user are documented in DIAGNOSTICS
+while errors passed internal to the calling program and intended for other
 programmers are documented in ERRORS.  When documenting a function that sets
 errno, a full list of the possible errno values should be given here.
 
@@ -463,6 +466,7 @@ page, are taken from the B<pod2man> documentation by Tom.
 
 =cut
 !NO!SUBS!
+#'# (cperl-mode)
 
 close OUT or die "Can't close $file: $!";
 chmod 0755, $file or die "Can't reset permissions for $file: $!\n";
