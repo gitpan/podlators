@@ -1,5 +1,5 @@
 # Pod::Man -- Convert POD data to formatted *roff input.
-# $Id: Man.pm,v 1.19 2001/07/10 11:08:09 eagle Exp $
+# $Id: Man.pm,v 1.22 2001/10/20 08:26:00 eagle Exp $
 #
 # Copyright 1999, 2000, 2001 by Russ Allbery <rra@stanford.edu>
 #
@@ -37,7 +37,7 @@ use vars qw(@ISA %ESCAPES $PREAMBLE $VERSION);
 # Don't use the CVS revision as the version, since this module is also in Perl
 # core and too many things could munge CVS magic revision strings.  This
 # number should ideally be the same as the CVS revision in podlators, however.
-$VERSION = 1.19;
+$VERSION = 1.22;
 
 
 ##############################################################################
@@ -569,7 +569,8 @@ sub sequence {
         } elsif (exists $ESCAPES{$_}) {
             return bless \ "$ESCAPES{$_}", 'Pod::Man::String';
         } else {
-            carp "Unknown escape E<$1>";
+            my ($file, $line) = $seq->file_line;
+            warn "$file:$line: Unknown escape E<$_>\n";
             return bless \ "E<$_>", 'Pod::Man::String';
         }
     }
@@ -607,7 +608,8 @@ sub sequence {
     if ($command eq 'X') { push (@{ $$self{INDEX} }, $_); return '' }
 
     # Anything else is unknown.
-    carp "Unknown sequence $command<$_>";
+    my ($file, $line) = $seq->file_line;
+    warn "$file:$line: Unknown sequence $command<$_>\n";
 }
 
 
@@ -702,7 +704,9 @@ sub cmd_back {
     my $self = shift;
     $$self{INDENT} = pop @{ $$self{INDENTS} };
     unless (defined $$self{INDENT}) {
-        carp "Unmatched =back";
+        my ($file, $line, $paragraph) = @_;
+        ($file, $line) = $paragraph->file_line;
+        warn "$file:$line: Unmatched =back\n";
         $$self{INDENT} = 0;
     }
     if ($$self{WEIRDINDENT}) {
@@ -1070,7 +1074,7 @@ sub outindex {
     $$self{INDEX} = [];
     my $output;
     if (@entries) {
-        my $output = '.IX Xref "'
+        $output = '.IX Xref "'
             . join (' ', map { s/\"/\"\"/; $_ } @entries)
             . '"' . "\n";
     }
@@ -1128,10 +1132,10 @@ sub switchquotes {
         # changes for nroff in =item tags, since they're unnecessary.
         $nroff =~ s/\\f\(CW(.*)\\f[PR]/$1/g;
 
-        # Now finally output the command.  Only bother with .if if the nroff
+        # Now finally output the command.  Only bother with .ie if the nroff
         # and troff output isn't the same.
         if ($nroff ne $troff) {
-            return ".if n $command $nroff\n.el $command $troff\n";
+            return ".ie n $command $nroff\n.el $command $troff\n";
         } else {
             return "$command $nroff\n";
         }
@@ -1344,17 +1348,17 @@ invalid.  A quote specification must be one, two, or four characters long.
 (W) The POD source contained a non-standard command paragraph (something of
 the form C<=command args>) that Pod::Man didn't know about.  It was ignored.
 
-=item Unknown escape EE<lt>%sE<gt>
+=item %s:%d: Unknown escape EE<lt>%sE<gt>
 
 (W) The POD source contained an C<EE<lt>E<gt>> escape that Pod::Man didn't
 know about.  C<EE<lt>%sE<gt>> was printed verbatim in the output.
 
-=item Unknown sequence %s
+=item %s:%d: Unknown sequence %s
 
 (W) The POD source contained a non-standard interior sequence (something of
 the form C<XE<lt>E<gt>>) that Pod::Man didn't know about.  It was ignored.
 
-=item Unmatched =back
+=item %s:%d: Unmatched =back
 
 (W) Pod::Man encountered a C<=back> command that didn't correspond to an
 C<=over> command.
