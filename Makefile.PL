@@ -1,5 +1,5 @@
 # Makefile.PL for podlators.
-# $Id: Makefile.PL,v 1.2 2001/11/15 07:58:37 eagle Exp $
+# $Id: Makefile.PL,v 1.3 2001/11/28 01:06:04 eagle Exp $
 
 BEGIN {
     require 5.004;
@@ -24,7 +24,7 @@ WriteMakefile (
     PL_FILES      => { script ('pod2text.PL', 'pod2text'),
                        script ('pod2man.PL', 'pod2man') },
     EXE_FILES     => [ script ('pod2text', 'pod2man') ],
-    PREREQ_PM     => { 'File::Spec' => 0.8, 'Pod::Parser' => 0 },
+    PREREQ_PM     => { 'File::Spec' => 0.8, 'Pod::Parser' => 1.13 },
     ($] >= 5.005 ?
      (ABSTRACT    => 'Convert POD data to various other formats',
       AUTHOR      => 'Russ Allbery (rra@stanford.edu)') : ()),
