@@ -1,5 +1,5 @@
 #!/usr/bin/perl -w
-# $Id: basic.t,v 1.3 2001/11/26 09:24:37 eagle Exp $
+# $Id: basic.t,v 1.4 2002/01/28 02:56:19 eagle Exp $
 #
 # basic.t -- Basic tests for podlators.
 #
@@ -97,6 +97,13 @@ for (sort keys %translators) {
         my $output = <OUTPUT>;
         close MASTER;
         close OUTPUT;
+
+        # OS/390 is EBCDIC, which uses a different character for ESC
+        # apparently.  Try to convert so that the test still works.
+        if ($^O eq 'os390' && $_ eq 'Pod::Text::Termcap') {
+            $output =~ tr/\033/\047/;
+        }
+
         if ($master eq $output) {
             print "ok $n\n";
             unlink "out.$translators{$_}";
