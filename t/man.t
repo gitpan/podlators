@@ -1,9 +1,9 @@
 #!/usr/bin/perl -w
-# $Id: man.t,v 1.6 2006-01-20 21:20:58 eagle Exp $
+# $Id: man.t,v 1.8 2006-01-25 23:58:22 eagle Exp $
 #
 # man.t -- Additional specialized tests for Pod::Man.
 #
-# Copyright 2002, 2003, 2004 by Russ Allbery <rra@stanford.edu>
+# Copyright 2002, 2003, 2004, 2006 by Russ Allbery <rra@stanford.edu>
 #
 # This program is free software; you may redistribute it and/or modify it
 # under the same terms as Perl itself.
@@ -34,6 +34,12 @@ my $n = 2;
 while (<DATA>) {
     next until $_ eq "###\n";
     open (TMP, '> tmp.pod') or die "Cannot create tmp.pod: $!\n";
+
+    # We have a test in ISO 8859-1 encoding.  Make sure that nothing strange
+    # happens if Perl thinks the world is Unicode.  Wrap this in eval so that
+    # older versions of Perl don't croak.
+    eval { binmode (\*TMP, ':encoding(iso-8859-1)') };
+
     while (<DATA>) {
         last if $_ eq "###\n";
         print TMP $_;
@@ -139,6 +145,8 @@ Also not a bullet.
 ###
 
 ###
+=encoding iso-8859-1
+
 =head1 ACCENTS
 
 Beyoncé!  Beyoncé!  Beyoncé!!

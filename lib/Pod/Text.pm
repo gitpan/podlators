@@ -1,5 +1,5 @@
 # Pod::Text -- Convert POD data to formatted ASCII text.
-# $Id: Text.pm,v 3.4 2006-01-21 01:54:20 eagle Exp $
+# $Id: Text.pm,v 3.6 2006-01-25 23:56:52 eagle Exp $
 #
 # Copyright 1999, 2000, 2001, 2002, 2004, 2006
 #     by Russ Allbery <rra@stanford.edu>
@@ -41,7 +41,7 @@ use Pod::Simple ();
 # Don't use the CVS revision as the version, since this module is also in Perl
 # core and too many things could munge CVS magic revision strings.  This
 # number should ideally be the same as the CVS revision in podlators, however.
-$VERSION = 3.04;
+$VERSION = 3.06;
 
 ##############################################################################
 # Initialization
@@ -589,9 +589,14 @@ sub pod2text {
 sub parse_from_file {
     my $self = shift;
     $self->reinit;
-    my $retval = $self->SUPER::parse_from_file (@_);
+    my $retval = $self->Pod::Simple::parse_from_file (@_);
     my $fh = $self->output_fh ();
-    close $fh;
+    my $oldfh = select $fh;
+    my $oldflush = $|;
+    $| = 1;
+    print $fh '';
+    $| = $oldflush;
+    select $oldfh;
     return $retval;
 }
 

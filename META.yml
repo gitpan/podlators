@@ -1,9 +1,9 @@
 # http://module-build.sourceforge.net/META-spec.html
 #XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
 name:         podlators
-version:      2.0.1
+version:      2.0.2
 version_from: VERSION
-installdirs:  site
+installdirs:  perl
 requires:
     File::Spec:                    0.8
     Pod::Simple:                   3.04

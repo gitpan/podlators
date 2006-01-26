@@ -1,5 +1,5 @@
 # Pod::Man -- Convert POD data to formatted *roff input.
-# $Id: Man.pm,v 2.6 2006-01-21 01:53:54 eagle Exp $
+# $Id: Man.pm,v 2.8 2006-01-25 23:56:52 eagle Exp $
 #
 # Copyright 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006
 #     Russ Allbery <rra@stanford.edu>
@@ -40,7 +40,7 @@ use POSIX qw(strftime);
 # Don't use the CVS revision as the version, since this module is also in Perl
 # core and too many things could munge CVS magic revision strings.  This
 # number should ideally be the same as the CVS revision in podlators, however.
-$VERSION = 2.06;
+$VERSION = 2.08;
 
 # Set the debugging level.  If someone has inserted a debug function into this
 # class already, use that.  Otherwise, use any Pod::Simple debug function
@@ -1211,7 +1211,12 @@ sub parse_from_file {
     $self->reinit;
     my $retval = $self->SUPER::parse_from_file (@_);
     my $fh = $self->output_fh ();
-    close $fh;
+    my $oldfh = select $fh;
+    my $oldflush = $|;
+    $| = 1;
+    print $fh '';
+    $| = $oldflush;
+    select $oldfh;
     return $retval;
 }
 
