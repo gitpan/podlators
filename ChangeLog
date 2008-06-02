@@ -1,3 +1,38 @@
+2008-06-01  Russ Allbery  <rra@stanford.edu>
+
+	* VERSION: podlators 2.1.0 released.
+
+	* Makefile.PL: Add LICENSE.
+
+	* lib/Pod/Man.pm (format_text): If the utf8 option is set, don't
+	convert non-ASCII characters to *roff escapes or X.  Document the
+	utf8 option.
+	* scripts/pod2man.PL: New option -u or --utf8 says to output
+	literal UTF-8 characters rather than pure ASCII.
+	* t/man-options.t: New file.  Test the utf8 option.
+
+	* t/man.t: Be more cautious about passing an encoding to binmode
+	to allow for a Perl without PerlIO.
+
+	* lib/Pod/Man.pm (switchquotes): Match text between \f(CW and \fP
+	or \fR in headings non-greedily to get the fonts right with
+	multiple C<> formatting codes.
+	* t/man.t: Test =head1 with multiple C<> codes.
+
+2008-05-14  Russ Allbery  <rra@stanford.edu>
+
+	* lib/Pod/Man.pm (preamble_template): Protect .Sh text against
+	leading *roff control characters since some *roff implementations
+	apparently "look through" font escapes at the beginning of lines.
+
+2008-05-12  Russ Allbery  <rra@stanford.edu>
+
+	* lib/Pod/Man.pm (format_text): Escape backslashes separately from
+	processing non-ASCII characters and do that, dash escaping, and
+	underscore adjustment before processing non-ASCII characters.
+	Otherwise, we escape the hyphen in eth characters.
+	* t/man.t: Test for handling of eth.
+
 2007-11-28  Russ Allbery  <rra@stanford.edu>
 
 	* VERSION: podlators 2.0.6 released.

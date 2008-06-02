@@ -1,5 +1,4 @@
 # Makefile.PL for podlators.
-# $Id: Makefile.PL,v 1.5 2006-01-20 21:20:06 eagle Exp $
 
 BEGIN {
     require 5.004;
@@ -27,7 +26,8 @@ WriteMakefile (
     PREREQ_PM     => { 'File::Spec' => 0.8, 'Pod::Simple' => 3.04 },
     ($] >= 5.005 ?
      (ABSTRACT    => 'Convert POD data to various other formats',
-      AUTHOR      => 'Russ Allbery (rra@stanford.edu)') : ()),
+      AUTHOR      => 'Russ Allbery (rra@stanford.edu)',
+      LICENSE     => 'perl') : ()),
     VERSION_FROM  => 'VERSION',
     realclean     => { FILES => scalar script ('pod2text', 'pod2man') }
 );
