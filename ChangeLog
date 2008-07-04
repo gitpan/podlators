@@ -1,3 +1,24 @@
+2008-07-03  Russ Allbery  <rra@stanford.edu>
+
+	* VERSION: podlators 2.1.1 released.
+
+	* t/man-options.t: Test changing the fixed-width fonts.
+
+	* lib/Pod/Man.pm (preamble): Pass a flag to preamble_template
+	indicating whether the output is in UTF-8.
+	(preamble_template): Don't include the accent mark definitions if
+	the output is in UTF-8.
+	* t/man-options.t: Test omission of the accent mark definitions
+	for UTF-8 output.
+
+	* Makefile.PL: Make the LICENSE key conditional on Perl 5.10 or
+	later since it wasn't supported in Perl 5.8.
+
+2008-06-04  Russ Allbery  <rra@stanford.edu>
+
+	* t/text.t: Fix test four (S<> handling with all whitespace) to
+	not give a spurious failure with Pod::Simple 3.06.
+
 2008-06-01  Russ Allbery  <rra@stanford.edu>
 
 	* VERSION: podlators 2.1.0 released.
