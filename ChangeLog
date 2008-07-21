@@ -1,3 +1,30 @@
+2008-07-20  Russ Allbery  <rra@stanford.edu>
+
+	* VERSION: podlators 2.1.2 released.
+
+	* t/pod-spelling.t: New check to spell-check all POD
+	documentation using ispell or hunspell with Pod::Spell.
+	* lib/Pod/Man.pm: Fix spelling and markup errors in
+	documentation and add stop-words where appropriate.
+	* lib/Pod/ParseLink.pm: Likewise.
+	* lib/Pod/Text.pm: Likewise.
+	* lib/Pod/Text/Color.pm: Likewise.
+	* lib/Pod/Text/Overstrike.pm: Likewise.
+	* lib/Pod/Text/Termcap.pm: Likewise.
+	* scripts/pod2man.PL: Likewise.
+	* scripts/pod2text.PL: Likewise.
+
+	* lib/Pod/Man.pm (cmd_head2): Use .SS instead of a local .Sh
+	macro for subheadings.
+	(preamble_template): Don't define .Sh.
+	* t/basic.man: Update output accordingly.
+	* t/man.t: Likewise.
+
+	* lib/Pod/Man.pm (format_text): Remap ISO 8850-1 non-breaking
+	spaces produced by Pod::Simple to the corresponding UTF-8 code
+	point for UTF-8 output.
+	* t/man-options.t: Test S<> output with UTF-8 enabled.
+
 2008-07-03  Russ Allbery  <rra@stanford.edu>
 
 	* VERSION: podlators 2.1.1 released.
