@@ -1,9 +1,49 @@
+2008-09-14  Russ Allbery  <rra@stanford.edu>
+
+	* VERSION: podlators 2.1.3 released.
+
+	* lib/Pod/Man.pm (new): Support a stderr option, saying to send
+	errors to standard error instead of a POD ERRORS section.
+	* lib/Pod/Text.pm (new): Likewise.
+	* scripts/pod2man.PL: New --stderr option.
+	* scripts/pod2text.PL: Likewise.
+	* t/man-options.t: Test POD ERRORS vs. stderr handling.
+	* t/text-options.t: Likewise.
+
+	* t/text-utf8.t: New test for UTF-8 handling in Pod::Text.
+	* lib/Pod/Text.pm (output): Better document why we're doing
+	character transformations on output.
+
+	* t/man-options.t: Properly set encoding on file descriptors and
+	in the POD file so that UTF-8 tests are handled with the correct
+	encoding.  Now that the test file is properly encoded, test that
+	non-breaking spaces doesn't interfere with hyphen detection.
+
+	* lib/Pod/Man.pm (format_text): Stop remapping the code point for
+	non-breaking space.  This should not be necessary and was wrong
+	when the string from Pod::Simple was a character string and not a
+	byte string.  It was papering over a bug in setting the encoding
+	of an input POD file.
+
+2008-08-08  Russ Allbery  <rra@stanford.edu>
+
+	* t/pod-spelling.t: Suppress the personal ispell dictionary when
+	checking spelling.
+	* lib/Pod/Man.pm: Add additional stopwords that were in my
+	personal dictionary.
+	* lib/Pod/ParseLink.pm: Likewise.
+	* scripts/pod2man.PL: Likewise.
+
+2008-08-07  Russ Allbery  <rra@stanford.edu>
+
+	* scripts/pod2man.PL: Mention --utf8 in the SYNOPSIS.
+
 2008-07-20  Russ Allbery  <rra@stanford.edu>
 
 	* VERSION: podlators 2.1.2 released.
 
 	* t/pod-spelling.t: New check to spell-check all POD
-	documentation using ispell or hunspell with Pod::Spell.
+	documentation using ispell with Pod::Spell.
 	* lib/Pod/Man.pm: Fix spelling and markup errors in
 	documentation and add stop-words where appropriate.
 	* lib/Pod/ParseLink.pm: Likewise.
