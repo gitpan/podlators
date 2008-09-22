@@ -1,3 +1,22 @@
+2008-09-21  Russ Allbery  <rra@stanford.edu>
+
+	* VERSION: podlators 2.1.4 released.
+
+	* t/pod-spelling.t: Also support aspell and search for it before
+	ispell.  Red Hat's ispell is actually aspell and doesn't support
+	the same arguments.
+	* lib/Pod/Man.pm: Add additional stopwords needed by aspell.
+	* lib/Pod/Text.pm: Likewise.
+	* lib/Pod/Text/Overstrike.pm: Likewise.
+	* scripts/pod2man.PL: Likewise.
+	* scripts/pod2text.PL: Likewise.
+
+	* t/man-options.t: Separate UTF-8 tests out to....
+	* t/man-utf8.t: ...here.  New file.  Skip UTF-8 tests for versions
+	of Perl prior to 5.8.
+	* t/text-utf8.t: Skip UTF-8 tests for versions of Perl prior to
+	5.8.
+
 2008-09-14  Russ Allbery  <rra@stanford.edu>
 
 	* VERSION: podlators 2.1.3 released.
