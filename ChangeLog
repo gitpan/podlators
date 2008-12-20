@@ -1,3 +1,23 @@
+2008-12-19  Russ Allbery  <rra@stanford.edu>
+
+	* VERSION: podlators 2.2.1 released.
+
+	* t/man.t: Add a test of =for.
+	* t/text.t: Likewise.
+
+2008-11-07  Russ Allbery  <rra@stanford.edu>
+
+	* t/text-encoding.t: Also set raw encoding on the output file
+	handle so that the test works properly on Windows.  Thanks, Steve
+	Hay.
+
+2008-11-03  Russ Allbery  <rra@stanford.edu>
+
+	* lib/Pod/Text.pm (pod2text): Properly initialize the output file
+	handle when called with only one argument.  Thanks, Michael G
+	Schwern.
+	* t/pod-parser.t: Test the pod2text function with one argument.
+
 2008-10-05  Russ Allbery  <rra@stanford.edu>
 
 	* VERSION: podlators 2.2.0 released.
