@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:                podlators
-version:             2.2.1
+version:             2.2.2
 abstract:            Convert POD data to various other formats
 license:             perl
 author:              
