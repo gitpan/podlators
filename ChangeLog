@@ -1,3 +1,40 @@
+2010-10-10  Russ Allbery  <rra@stanford.edu>
+
+	* VERSION: podlators 2.4.0 released.
+
+	* scripts/pod2man: Remove the code to generate the #! line and
+	supporting code and instead rely on ExtUtils::MakeMaker to handle
+	that during package build.
+	* scripts/pod2text: Likewise.
+	* scripts/pod2man.PL: Renamed to pod2man.
+	* scripts/pod2text.PL: Renamed to pod2text.
+	* Makefile.PL: Remove PL_FILES section.
+
+	* pod/perlpodstyle.pod: New style guide for POD documentation,
+	split mostly from the NOTES section of the pod2man man page.
+	* scripts/pod2man.PL: Remove NOTES section, now maintained as the
+	separate perlpodstyle document.
+	* Makefile.PL: Add perlpodstyle.1 to the generated man pages.
+
+	* lib/Pod/Man.pm (cmd_para): Do not strip escaped trailing
+	whitespace, such as that created by S<> at the end of a line,
+	since the backslash is then taken by *roff as escaping the
+	newline.  Thanks, Kevin Ryde.
+	* t/man.t: Test S<> at the end of lines.
+
+	* lib/Pod/Man.pm (output): If the utf8 option is given, encode
+	output in UTF-8 if there is no encoding layer.  Now requires the
+	Encode module.
+	(start_document): Rather than forcibly change the PerlIO encoding
+	layer, probe the PerlIO layers with protection for Perl versions
+	without PerlIO and set a flag indicating whether to encode on the
+	fly on output.
+	* lib/Pod/Text.pm: Likewise.
+	* Makefile.PL: Mark Encode as required.
+	* t/man-perlio.t: Test Pod::Man output to a file handle with a
+	PerlIO encoding layer already applied.
+	* t/text-perlio.t: Likewise for Pod::Text.
+
 2010-02-17  Russ Allbery  <rra@stanford.edu>
 
 	* VERSION: podlators 2.3.1 released.

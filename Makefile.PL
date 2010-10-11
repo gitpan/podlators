@@ -1,5 +1,7 @@
 # Makefile.PL for podlators.
 
+use Config;
+
 BEGIN {
     require 5.004;
     eval { require File::Spec };
@@ -12,6 +14,15 @@ sub script {
     wantarray ? @scripts : join (' ', @scripts);
 }
 
+sub man1pod {
+    my ($dir, $file) = @_;
+    my $base = $file;
+    $base =~ s/\..*//;
+    my $output = File::Spec->catfile ('blib', 'man1',
+                                      $base . '.' . $Config{man1ext});
+    return File::Spec->catfile ($dir, $file), $output;
+}
+
 # Install the modules into the Perl core directory for versions of Perl at
 # 5.6.0 or higher, since these modules now come with Perl.
 use ExtUtils::MakeMaker;
@@ -20,10 +31,13 @@ WriteMakefile (
     DISTNAME      => 'podlators',
     ($] >= 5.006 ?
      (INSTALLDIRS => 'perl') : ()),
-    PL_FILES      => { script ('pod2text.PL', 'pod2text'),
-                       script ('pod2man.PL', 'pod2man') },
     EXE_FILES     => [ script ('pod2text', 'pod2man') ],
-    PREREQ_PM     => { 'File::Spec' => 0.8, 'Pod::Simple' => 3.06 },
+    MAN1PODS      => { man1pod ('scripts', 'pod2man'),
+                       man1pod ('scripts', 'pod2text'),
+                       man1pod ('pod', 'perlpodstyle.pod') },
+    PREREQ_PM     => { 'Encode'      => 0,
+                       'File::Spec'  => 0.8,
+                       'Pod::Simple' => 3.06 },
     ($] >= 5.005 ?
      (ABSTRACT    => 'Convert POD data to various other formats',
       AUTHOR      => 'Russ Allbery (rra@stanford.edu)') : ()),
