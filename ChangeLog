@@ -1,3 +1,78 @@
+2012-05-30  Russ Allbery  <rra@stanford.edu>
+
+	* VERSION: podlators 2.4.1 released.
+
+	* lib/Pod/Man.pm (parse_file): Override the Pod::Simple method to
+	set output_fh to STDOUT if it's not already set.  (#77530)
+	* lib/Pod/Text.pm (parse_file): Likewise.
+
+2012-05-26  Russ Allbery  <rra@stanford.edu>
+
+	* t/basic.t: Embed PID in file names to avoid conflicts when
+	running the test suite in parallel.  (#62083)
+	* t/color.t: Likewise.
+	* t/filehandle.t: Likewise.
+	* t/man-heading.t: Likewise.
+	* t/man-options.t: Likewise.
+	* t/man-perlio.t: Likewise.
+	* t/man-utf8.t: Likewise.
+	* t/man.t: Likewise.
+	* t/overstrike.t: Likewise.
+	* t/pod-parser.t: Likewise.
+	* t/termcap.t: Likewise.
+	* t/text-encoding.t: Likewise.
+	* t/text-options.t: Likewise.
+	* t/text-perlio.t: Likewise.
+	* t/text-utf8.t: Likewise.
+	* t/text.t: Likewise.
+
+	* t/man.t: Add another test for anchor text based on an RT ticket.
+	* t/text.t: Likewise.
+
+	* lib/Pod/Man.pm (start_document): Request details on PerlIO
+	layers to look for the UTF8 flag, which is not a layer in its own
+	right.  Based on a patch from Leon Timmermans.  (perl #76440)
+	* lib/Pod/Text.pm (start_document): Likewise.
+
+	* lib/Pod/Man.pm (preamble_template): Fix handling of the F
+	register when processing multiple documents at once.  .IX will now
+	continue to be defined for documents after the first, and the page
+	number will not be reset at the start of each document.  Thanks to
+	Nicholas Clark for the analysis.  (perl #103202)
+
+	* lib/Pod/Man.pm (start_document): Remove CONTENTLESS parser state
+	between documents.
+	* lib/Pod/Text.pm (start_document): Set CONTENTLESS in the parser
+	if the document contained no content.
+	* scripts/pod2man: Report an error and remove the empty output
+	file if the input file had no content (if it did not exist, for
+	example).  Exit with non-zero status if there were any errors.
+	Based on a patch by Dmitry Smirnov.  (#75099)
+	* scripts/pod2text: Likewise.
+
+	* lib/Pod/Man.pm (cmd_l): Format the URL text before comparing it
+	to the anchor when deciding whether to show separate anchor text.
+	This avoids spurious mismatches between the URL target and anchor
+	text because the anchor text was already formatted and has (for
+	example) hyphens escaped.  (#76396)
+	* t/man.t: Test L<> formatting codes with URLs containing hyphens.
+
+	* lib/Pod/Man.pm (preamble_template): Define \*(C` and \*(C' to
+	the empty string when processed through troff to avoid groff
+	warnings.  Avoid warnings from checking the F register (used to
+	enable index output) when running under groff.  Patch from Bjarni
+	Ingi Gislason.  (#75434)
+
+2012-02-14  Russ Allbery  <rra@stanford.edu>
+
+	* Makefile.PL: Stop removing pod2man and pod2text on make
+	realclean, left over from when they were *.PL scripts.  (#74848)
+
+2011-12-20  Russ Allbery  <rra@stanford.edu>
+
+	* lib/Pod/Man.pm: Fix the ASCII fallback string for the AE
+	ligature to use the string that was actually defined.
+
 2010-10-10  Russ Allbery  <rra@stanford.edu>
 
 	* VERSION: podlators 2.4.0 released.
