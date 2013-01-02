@@ -1,9 +1,9 @@
 --- #YAML:1.0
 name:               podlators
-version:            2.4.2
+version:            2.5.0
 abstract:           Convert POD data to various other formats
 author:
-    - Russ Allbery (rra@stanford.edu)
+    - Russ Allbery <rra@stanford.edu>
 license:            perl
 distribution_type:  module
 configure_requires:

@@ -1,3 +1,46 @@
+2013-01-02  Russ Allbery  <rra@stanford.edu>
+
+	* VERSION: podlators 2.5.0 released.
+
+	* lib/Pod/Man.pm (guesswork): Extend a small-caps section through
+	the punctuation that commonly appears in license disclaimers so
+	that small caps isn't turned on and off at the boundaries of every
+	word, producing unreadable *roff.
+	* t/man.t: Test the updated small-caps behavior.
+
+	* lib/Pod/Man.pm (new): Support a new errors option with values
+	die, stderr, pod, and none.  Convert the stderr option to the
+	errors option with value stderr.  (#39007)
+	(end_document): Die if errors was set to die and there were POD
+	syntax errors.
+	* lib/Pod/Text.pm (new): Likewise.
+	(end_document): Likewise.
+	* scripts/pod2man: Support a new --errors option that sets the
+	underlying errors formatter option and default to dying on POD
+	syntax errors.
+	* scripts/pod2text: Likewise.
+	* t/man-options.t: Add support for catching exceptions during
+	formatting.  Test valid and invalid errors settings.
+	* t/text-options.t: Likewise.
+
+	* lib/Pod/Man.pm (cmd_l): Add nourls option to suppress the URL
+	from L<> formatting codes that contain anchor text.  (#62210)
+	* lib/Pod/Text.pm (cmd_l): Likewise.
+	* scripts/pod2man: New --nourls option to set the corresponding
+	option in Pod::Man.
+	* scripts/pod2text: Likewise for Pod::Text.
+	* t/man-options.t: Test new nourls option.
+	* t/text-options.t: Likewise.
+
+	* lib/Pod/Man.pm (outindex): Also collapse consecutive whitespace
+	in index term text.
+	* t/man.t: Test for handling of index terms containing whitespace.
+
+2013-01-02  Kevin Ryde  <user42@zip.com.au>
+
+	* lib/Pod/Man.pm (outindex): Remove newlines from index term text
+	since *roff quotes don't span lines.  (#82332)
+
 2012-06-01  Russ Allbery  <rra@stanford.edu>
 
 	* VERSION: podlators 2.4.2 released.
@@ -41,7 +84,7 @@
 
 	* lib/Pod/Man.pm (start_document): Request details on PerlIO
 	layers to look for the UTF8 flag, which is not a layer in its own
-	right.  Based on a patch from Leon Timmermans.  (perl #76440)
+	right.  Based on a patch from Leon Timmermans.  (#76440)
 	* lib/Pod/Text.pm (start_document): Likewise.
 
 	* lib/Pod/Man.pm (preamble_template): Fix handling of the F
@@ -104,7 +147,7 @@
 	* lib/Pod/Man.pm (cmd_para): Do not strip escaped trailing
 	whitespace, such as that created by S<> at the end of a line,
 	since the backslash is then taken by *roff as escaping the
-	newline.  Thanks, Kevin Ryde.
+	newline.  Thanks, Kevin Ryde.  (#61781)
 	* t/man.t: Test S<> at the end of lines.
 
 	* lib/Pod/Man.pm (output): If the utf8 option is given, encode
