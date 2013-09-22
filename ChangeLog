@@ -1,3 +1,61 @@
+2013-09-22  Russ Allbery  <rra@stanford.edu>
+
+	* VERSION: podlators 2.5.2 released.
+
+	* lib/Pod/Man.pm (_handle_element_start): Merge the two formatting
+	hashes and move the data to the top of the module.
+	(cmd_para): Separate reverse from the substitution.
+	(cmd_verbatim): Likewise.
+
+2013-09-22  Dagfinn Ilmari Mannsåker  <ilmari@ilmari.org>
+
+	* lib/Pod/Man.pm (cmd_para): Reverse the text before fixing
+	trailing whitespace to avoid having to scan the entire paragraph.
+	(cmd_verbatim): Likewise.
+
+	* lib/Pod/Man.pm (method_for_element): Merge two tr expressions.
+
+	* lib/Pod/Man.pm (formatting): Replaced with two hashes that store
+	the default and override formatting options for different blocks.
+	(_handle_element_start): Inline the formatting logic using those
+	hashes and remove the call to formatting.  (#83253)
+
+	* lib/Pod/Man.pm (new): Save the results of can and use it to make
+	the method call to avoid redoing method lookup.
+	(_handle_element_start): Likewise.
+	(_handle_element_end): Likewise.
+
+2013-09-21  Russ Allbery  <rra@stanford.edu>
+
+	* lib/Pod/Man.pm (parse_lines): Override the Pod::Simple method to
+	set a default output file handle of STDOUT if none was set,
+	matching the behavior of parse_file.
+	(parse_string_document): Likewise.
+	* lib/Pod/Text.pm (parse_lines): Likewise.
+	(parse_string_document): Likewise.
+
+	* lib/Pod/Man.pm (start_document): Perform document initialization
+	even if the document is contentless.  Documents with only errors
+	are shown as contentless but then have a POD ERRORS section, and
+	previously this led to internal errors because state variables
+	weren't properly initialized.  Thanks, Andreas Koenig.  (#88724)
+	* lib/Pod/Text.pm (start_document): Likewise.
+	* t/man-empty.t: New file.  Test error handling with contentless
+	documents.
+	* t/text-empty.t: Likewise.
+
+	* lib/Pod/Man.pm: Fix an output_fh reference in the documentation.
+	Thanks, Andreas Koenig.  (#88723)
+
+	* lib/Pod/Man.pm (guesswork): Fix comment typos.  Thanks, David
+	Steinbrunner.  (#85683)
+	* lib/Pod/Text/Termcap.pm (strip_format): Likewise.
+	(wrap): Likewise.
+
+	* pod/perlpodstyle.pod: Wrap verbatim license line in POD that was
+	over 79 characters after the man page indentation.  Thanks, Brian
+	Gottreu and Steve Hay.  (#87440)
+
 2013-02-27  Russ Allbery  <rra@stanford.edu>
 
 	* VERSION: podlators 2.5.1 released.
